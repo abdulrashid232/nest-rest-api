@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './DTO/user.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { User } from './models/user.interface';
 
 @Injectable()
@@ -21,14 +21,13 @@ export class UsersService {
     return Promise.resolve(newUser);
   }
 
-  updateUser(
+  async updateUser(
     id: string,
-    updateUserDto: Partial<CreateUserDto>,
+    updateUserDto: UpdateUserDto,
   ): Promise<User | undefined> {
-    return this.findUserById(id).then((user) => {
-      if (!user) return undefined;
-      Object.assign(user, updateUserDto);
-      return Promise.resolve(user);
-    });
+    const user = await this.findUserById(id);
+    if (!user) return undefined;
+    Object.assign(user, updateUserDto);
+    return user;
   }
 }

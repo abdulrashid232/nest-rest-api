@@ -1,5 +1,13 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
-import { CreateUserDto } from './DTO/user.dto';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  ValidationPipe,
+} from '@nestjs/common';
+import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { UsersService } from './users.service';
 import { User } from './models/user.interface';
 
@@ -13,7 +21,7 @@ export class UsersController {
   }
 
   @Post()
-  addUser(@Body() createUserDto: CreateUserDto) {
+  addUser(@Body(ValidationPipe) createUserDto: CreateUserDto) {
     return this.usersService.addUser(createUserDto);
   }
 
@@ -24,7 +32,7 @@ export class UsersController {
   @Patch(':id')
   updateUser(
     @Param('id') id: string,
-    @Body() updateUserDto: Partial<CreateUserDto>,
+    @Body(ValidationPipe) updateUserDto: UpdateUserDto,
   ) {
     return this.usersService.updateUser(id, updateUserDto);
   }
